@@ -20,8 +20,8 @@
         ...
       }: {
         packages = {
-          update = pkgs.writeShellApplication {
-            name = "update";
+          bumpArgServices = pkgs.writeShellApplication {
+            name = "bump-arg-services";
             text = ''
               if [ "$#" -ne 1 ]; then
                 echo "Usage: $0 VERSION" >&2
@@ -72,6 +72,9 @@
               fi
             '';
           };
+        };
+        devShells.default = pkgs.mkShell {
+          packages = with pkgs; [mu-repo] ++ lib.attrValues self'.packages;
         };
       };
     };
