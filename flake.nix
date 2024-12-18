@@ -7,7 +7,6 @@
   outputs =
     inputs@{
       flake-parts,
-      nixpkgs,
       systems,
       ...
     }:
@@ -17,7 +16,6 @@
         {
           pkgs,
           lib,
-          system,
           self',
           ...
         }:
@@ -56,12 +54,9 @@
                 fi
 
                 # update deps in buf.yaml
-                ${lib.getExe pkgs.sd} -- '(buf.build/recap/arg-services):v.*' "\$1:$versionTag" */buf.yaml
+                ${lib.getExe pkgs.sd} -- '(buf.build/recap/arg-services):v.*' "\$1:$versionTag" */buf.gen.yaml
 
-                # update buf.lock
-                ${lib.getExe pkgs.mu-repo} sh ${lib.getExe pkgs.buf} mod update
-
-                commitMessage="$commitPrefix: bump arg-services to $versionTag"
+                commitMessage="''${commitPrefix}(deps): bump arg-services to $versionTag"
 
                 # https://stackoverflow.com/a/1885534
                 read -p "Commit changes with message '$commitMessage' (y/n)? " -r shouldCommit
